@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAD Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="version">Version 1.0.4 Beta</div>
+
+    
+    <div class="container">
+    <!-- Disclaimer Modal -->
+    <div id="disclaimerOverlay" class="disclaimer-overlay">
+        <div class="disclaimer-box">
+            <h3>Welcome</h3>
+            <p>This system is provided by the Lake George Communications Brigade. 
+                It is volunteer run and designed to teach others on using CAD command line.
+            </p><strong>You must use a desktop to access this.</strong></p>
+                <p> -----  </p>
+                <p>Suggestions can be sent <a href="mailto:christopherwall-vol@rfs.nsw.gov.au">here</a>.</p>
+            <button id="disclaimerOkButton">OK</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the disclaimer elements
+            const disclaimerOverlay = document.getElementById("disclaimerOverlay");
+            const okButton = document.getElementById("disclaimerOkButton");
+    
+            // Display the disclaimer when the page loads
+            disclaimerOverlay.style.display = "flex";
+    
+            // Close the disclaimer when the OK button is clicked
+            okButton.addEventListener("click", function () {
+                disclaimerOverlay.style.display = "none";
+            });
+        });
+    </script>
+    
+        <div class="resources-grid" id="bingoGrid">
+            <h3>All Resources</h3>
+            <div class="bingo-items-container">
+            <div class="bingo-item" id="LGARALU2">LGARALU2</div>
+            <div class="bingo-item" id="LGARALU7">LGARALU7</div>
+            <div class="bingo-item" id="LGARALU9">LGARALU9</div>
+            <div class="bingo-item" id="LGB31">LGB31</div>
+            <div class="bingo-item" id="LGB32">LGB32</div>
+            <div class="bingo-item" id="LGBOMBA1">LGBOMBA1</div>
+            <div class="bingo-item" id="LGBOMBA7">LGBOMBA7</div>
+            <div class="bingo-item" id="LGBRAID1">LGBRAID1</div>
+            <div class="bingo-item" id="LGBRAID7">LGBRAID7</div>
+            <div class="bingo-item" id="LGBRAID9">LGBRAID9</div>
+            <div class="bingo-item" id="LGBORMT1">LGBORMT1</div>
+            <div class="bingo-item" id="LGBORMT7">LGBORMT7</div>
+            <div class="bingo-item" id="LGBUNGEP">LGBUNGEP</div>
+            <div class="bingo-item" id="LGBUNGE1">LGBUNGE1</div>
+            <div class="bingo-item" id="LGBUNGE7">LGBUNGE7</div>
+            <div class="bingo-item" id="LGBUSA">LGBUSA</div>
+            <div class="bingo-item" id="LGBUSB">LGBUSB</div>
+            <div class="bingo-item" id="LGBUSC">LGBUSC</div>
+            <div class="bingo-item" id="LGCAPFL1">LGCAPFL1</div>
+            <div class="bingo-item" id="LGCAPFL7">LGCAPFL7</div>
+            <div class="bingo-item" id="LGCAPFL9">LGCAPFL9</div>
+            <div class="bingo-item" id="LGCARWO1">LGCARWO1</div>
+            <div class="bingo-item" id="LGCARWO7A">LGCARWO7A</div>
+            <div class="bingo-item" id="LGCARWO7B">LGCARWO7B</div>
+            <div class="bingo-item" id="LGCHARL2">LGCHARL2</div>
+            <div class="bingo-item" id="LGCHARL7">LGCHARL7</div>
+            <div class="bingo-item" id="LGCMDJ">LGCMDJ</div>
+            <div class="bingo-item" id="LGCMDK">LGCMDK</div>
+            <div class="bingo-item" id="LGLAKGE1">LGLAKGE1</div>
+            <div class="bingo-item" id="LGLAKGE6">LGLAKGE6</div>
+            <div class="bingo-item" id="LGDO">LGDO</div>
+            <div class="bingo-item" id="LGFARRI1">LGFARRI1</div>
+            <div class="bingo-item" id="LGFARRI7">LGFARRI7</div>
+            <div class="bingo-item" id="LGFCO1">LGFCO1</div>
+            <div class="bingo-item" id="LGFCO2">LGFCO2</div>
+            <div class="bingo-item" id="LGFCO41">LGFCO41</div>
+            <div class="bingo-item" id="LGFCO42">LGFCO42</div>
+            <div class="bingo-item" id="LGFCO43">LGFCO43</div>
+            <div class="bingo-item" id="LGFCO51">LGFCO51</div>
+            <div class="bingo-item" id="LGG1">LGG1</div>
+            <div class="bingo-item" id="LGG2">LGG2</div>
+            <div class="bingo-item" id="LGG3">LGG3</div>
+            <div class="bingo-item" id="LGG4">LGG4</div>
+            <div class="bingo-item" id="LGG5">LGG5</div>
+            <div class="bingo-item" id="LGDG1">LGDG1</div>
+            <div class="bingo-item" id="LGDG2">LGDG2</div>
+            <div class="bingo-item" id="LGDG3">LGDG3</div>
+            <div class="bingo-item" id="LGDG4">LGDG4</div>
+            <div class="bingo-item" id="LGHOSKI1">LGHOSKI1</div>
+            <div class="bingo-item" id="LGHOSKI7">LGHOSKI7</div>
+            <div class="bingo-item" id="LGHOSKI9">LGHOSKI9</div>
+            <div class="bingo-item" id="LGJERCR1">LGJERCR1</div>
+            <div class="bingo-item" id="LGJERCR7A">LGJERCR7A</div>
+            <div class="bingo-item" id="LGJERCR9">LGJERCR9</div>
+            <div class="bingo-item" id="LGJERCRP">LGJERCRP</div>
+            <div class="bingo-item" id="LGKRAWA1">LGKRAWA1</div>
+            <div class="bingo-item" id="LGKRAWA7">LGKRAWA7</div>
+            <div class="bingo-item" id="LGKRAWA9">LGKRAWA9</div>
+            <div class="bingo-item" id="LGLOGISA">LGLOGISA</div>
+            <div class="bingo-item" id="LGLOGISB">LGLOGISB</div>
+            <div class="bingo-item" id="LGLOGISC">LGLOGISC</div>
+            <div class="bingo-item" id="LGLOGISD">LGLOGISD</div>
+            <div class="bingo-item" id="LGMAJCR2">LGMAJCR2</div>
+            <div class="bingo-item" id="LGMAJCR7">LGMAJCR7</div>
+            <div class="bingo-item" id="LGMONGA1">LGMONGA1</div>
+            <div class="bingo-item" id="LGMONGA7">LGMONGA7</div>
+            <div class="bingo-item" id="LGMULLO1">LGMULLO1</div>
+            <div class="bingo-item" id="LGMULLO7">LGMULLO7</div>
+            <div class="bingo-item" id="LGNERRI1">LGNERRI1</div>
+            <div class="bingo-item" id="LGNERRI7">LGNERRI7</div>
+            <div class="bingo-item" id="LGNERRI9">LGNERRI9</div>
+            <div class="bingo-item" id="LGOCV">LGOCV</div>
+            <div class="bingo-item" id="LGQUEAN1">LGQUEAN1</div>
+            <div class="bingo-item" id="LGQUEAN7A">LGQUEAN7A</div>
+            <div class="bingo-item" id="LGQUEAN7B">LGQUEAN7B</div>
+            <div class="bingo-item" id="LGQUEAN9">LGQUEAN9</div>
+            <div class="bingo-item" id="LGRIDGE1A">LGRIDGE1A</div>
+            <div class="bingo-item" id="LGRIDGE1B">LGRIDGE1B</div>
+            <div class="bingo-item" id="LGWAMBO1A">LGWAMBO1A</div>
+            <div class="bingo-item" id="LGWAMBO1B">LGWAMBO1B</div>
+            <div class="bingo-item" id="LGWAMBO7A">LGWAMBO7A</div>
+            <div class="bingo-item" id="LGWAMBO7B">LGWAMBO7B</div>
+        </div>
+    </div>
+
+           <!-- Log and How-To Column -->
+           <div class="log-how-to-column">
+            <!-- Log Section (Top Half) -->
+            <div class="log-section">
+                <h3>Log</h3>
+                <div id="log"></div>
+            </div>
+
+            <!-- How-To Guide Section (Bottom Half) -->
+            <div style="
+            width: auto; /* Adjust width to fill parent container or change as needed */
+            height: auto;
+            margin: 20px 0; /* Reduce or remove margins that might affect layout */
+            padding: 20px; 
+            background-color: #303030; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            font-family: Arial, sans-serif; 
+            color: #ffffff;
+            text-align: center;">
+
+                <h3 style="margin-bottom: 10px; font-size: 24px; color: #ffffff;">Command Line Simulator</h3>
+
+                <p style="font-size: 16px; margin-bottom: 15px;">
+                    Here are some commands to try:
+                </p>
+
+                <ul style="list-style: none; padding: 0;">
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 12px;">
+                            <code style="
+                                background-color: #525252; 
+                                padding: 5px 8px; 
+                                border-radius: 4px; 
+                                font-family: monospace;">
+                                callsign/s/status
+                            </code> – Update a unit’s status.
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <strong>Status Codes:</strong>
+                            <ul style="list-style: none; padding-left: 15px;">
+                                <li style="margin-bottom: 6px;">
+                                    <code style="
+                                        background-color: #525252; 
+                                        padding: 5px 8px; 
+                                        border-radius: 4px; 
+                                        font-family: monospace;">
+                                        1
+                                    </code> – responding
+                                </li>
+                                <li style="margin-bottom: 6px;">
+                                    <code style="
+                                        background-color: #525252; 
+                                        padding: 5px 8px; 
+                                        border-radius: 4px; 
+                                        font-family: monospace;">
+                                        3
+                                    </code> – on scene
+                                </li>
+                                <li style="margin-bottom: 6px;">
+                                    <code style="
+                                        background-color: #525252; 
+                                        padding: 5px 8px; 
+                                        border-radius: 4px; 
+                                        font-family: monospace;">
+                                        4
+                                    </code> – available
+                                </li>
+                                <li style="margin-bottom: 6px;">
+                                    <code style="
+                                        background-color: #525252; 
+                                        padding: 5px 8px; 
+                                        border-radius: 4px; 
+                                        font-family: monospace;">
+                                        5
+                                    </code>– at station
+                                </li>
+                                <li style="margin-bottom: 6px;">
+                                    <code style="
+                                        background-color: #525252; 
+                                        padding: 5px 8px; 
+                                        border-radius: 4px; 
+                                        font-family: monospace;">
+                                        7
+                                    </code> – not available
+                                </li>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <li style="margin-bottom: 12px;">
+                        <code style="
+                            background-color: #525252; 
+                            padding: 5px 8px; 
+                            border-radius: 4px; 
+                            font-family: monospace;">
+                            callsign/m/message
+                        </code> – Add an operator comment to a unit.
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        <code style="
+                            background-color: #525252; 
+                            padding: 5px 8px; 
+                            border-radius: 4px; 
+                            font-family: monospace;">
+                            callsign/m/message;U
+                        </code> – Add a sitrep to the unit under their incident.
+                    </li>
+                    <li style="margin-bottom: 12px;">
+                        <code style="
+                            background-color: #525252; 
+                            padding: 5px 8px; 
+                            border-radius: 4px; 
+                            font-family: monospace;">
+                            callsign/ASS
+                        </code> – Assign a unit to an incident.
+                    </li>
+                </ul>
+                <p><strong>Refresh to reset.</strong></p>
+            </div>
+        </div>
+        
+        <div class="incidents-pane">
+            <h3>Incidents</h3>
+            <div class="incidents-grid" id="incidentsGrid">
+                <!-- Example Incident Card -->
+                <div class="incident-card" id="47657">
+                    <h4>CAD #47657</h4>
+                    <p><strong>Type:</strong> GRASS FIRE</p>
+                    <p><strong>Address:</strong> BUNGENDORE RD X FED HWY BYWONG</p>
+                    <p><strong>Narrative:</strong> INFT TRAVELLING DOWN FEDERAL HWY SAW SMOKE IN VIC OF GIVEN ADDRESS</p>
+                </div>
+                
+                <div class="incident-card" id="67890">
+                    <h4>CAD #67890</h4>
+                    <p><strong>Type:</strong> ASSIST AMBOS</p>
+                    <p><strong>Address:</strong> 45 RIVERSIDE DR, BRAIDWOOD</p>
+                    <p><strong>Narrative:</strong> AMBOS REQ URGENT LIFT</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="command-section">
+            <input type="text" id="commandInput" placeholder="Enter command here.. " autofocus>
+            <button id="cmdButton" onclick="processCommand()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+    var input = document.getElementById("commandInput");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("cmdButton").click();
+        }
+    });
+
+    function processCommand() {
+        const commandInput = document.getElementById("commandInput");
+        const log = document.getElementById("log");
+        const commandText = commandInput.value.trim();
+
+        if (commandText !== "") {
+            const parsedCommands = interpretCommand(commandText);
+                parsedCommands.forEach(logMessage => {
+        const logEntry = document.createElement("div");
+        logEntry.classList.add("log-message");
+        logEntry.innerHTML = highlightUnits(logMessage); // Highlight units in the log
+
+        // Add the new log entry to the top
+        log.prepend(logEntry);
+
+        // Scroll to the latest entry
+        log.scrollTop = 0; // If latest entries are added at the top, set scroll to top
+    });
+
+
+            commandInput.value = "";
+        }
+    }
+
+    function interpretCommand(command) {
+        const [callsignsPart, commandType, statusOrMessage] = command.split('/');
+        if (!callsignsPart || !commandType) return [];
+
+        const callsigns = callsignsPart.split(',').map(c => c.trim()).filter(Boolean);
+        const logMessages = [];
+
+        if (commandType === 'S' && statusOrMessage) {
+            const statusString = getStatusString(statusOrMessage);
+            callsigns.forEach(callsign => {
+                updateResourceStatus(callsign, statusOrMessage);
+                logMessages.push(`${callsign}: status updated to ${statusString}`);
+            });
+        } else if (commandType === 'M' && statusOrMessage) {
+            const [message, reportType] = statusOrMessage.split(';');
+            const tag = reportType === 'U' ? 'SITREP' : 'OPERATOR COMMENT';
+
+            callsigns.forEach(callsign => {
+                logMessages.push(`
+                    <div class="log-message">
+                        <div class="log-header">
+                            <span class="log-tag ${tag.replace(' ', '-')}">${tag}</span>
+                            <span class="timestamp">${getCurrentTime()}</span>
+                        </div>
+                        <span>${callsign}: ${message.trim()}</span>
+                    </div>
+                `);
+            });
+        } else if (commandType === 'ASS') {
+            showIncidentSelectionModal(callsigns[0]);
+        } else {
+            logMessages.push(`Invalid command: ${command}. Did you use caps? Try rewriting your command.`);
+        }
+
+        return logMessages;
+    }
+
+    function showIncidentSelectionModal(callsign) {
+        const modalOverlay = document.createElement('div');
+        modalOverlay.classList.add('modal-overlay');
+        modalOverlay.onclick = () => {
+            closeModal(modalOverlay, modal);
+        };
+        document.body.appendChild(modalOverlay);
+
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+
+        const selectLabel = document.createElement('label');
+        selectLabel.textContent = `Select an incident for ${callsign}: `;
+        modal.appendChild(selectLabel);
+
+        const select = document.createElement('select');
+        select.id = 'incidentSelect';
+        document.querySelectorAll('.incident-card').forEach(incident => {
+            const option = document.createElement('option');
+            option.value = incident.id;
+            option.textContent = incident.querySelector('h4').textContent;
+            select.appendChild(option);
+        });
+        modal.appendChild(select);
+
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'Assign';
+        submitButton.style.marginLeft = '10px';
+        submitButton.onclick = () => {
+            const incidentId = document.getElementById('incidentSelect').value;
+            assignResourceToIncident(callsign, incidentId);
+            closeModal(modalOverlay, modal);
+        };
+        modal.appendChild(submitButton);
+
+        document.body.appendChild(modal);
+    }
+
+    function closeModal(modalOverlay, modal) {
+        document.body.removeChild(modal);
+        document.body.removeChild(modalOverlay);
+    }
+
+ // Initialize the map to track incident assignments
+const unitIncidentMap = {};
+
+function assignResourceToIncident(callsign, incidentId) {
+    const resourceElement = document.getElementById(callsign);
+    const log = document.getElementById("log");
+    if (resourceElement) {
+        // Change status to 'AL' (Alerted)
+        updateResourceStatus(callsign, 'AL');
+
+        // Move resource into the incident card
+        const incidentCard = document.getElementById(incidentId);
+        if (incidentCard) {
+            let incidentResources = incidentCard.querySelector('.incident-resources');
+            if (!incidentResources) {
+                incidentResources = document.createElement('div');
+                incidentResources.classList.add('incident-resources');
+                incidentCard.appendChild(incidentResources);
+            }
+            incidentResources.appendChild(resourceElement);
+
+            // Track the incident assignment in the map
+            unitIncidentMap[callsign] = incidentId;
+        }
+
+        // Log the action
+        const logEntry = document.createElement("div");
+        logEntry.classList.add("log-message");
+        logEntry.innerHTML = highlightUnits(`${callsign} alerted to incident #${incidentId}`);
+        log.prepend(logEntry);
+    }
+}
+
+function updateResourceStatus(callsign, status) {
+    const resourceElement = document.getElementById(callsign);
+    if (!resourceElement) return;
+
+    const statusColors = {
+        '1': 'yellow',
+        '3': 'black',
+        '4': 'green',
+        '5': 'grey',
+        '7': '#CF9FFF',
+        'AL': 'blue'
+    };
+
+    resourceElement.style.backgroundColor = statusColors[status] || 'grey';
+    resourceElement.style.color = status === '3' ? 'white' : 'black';
+
+    // Move resource back to bingo card if status is 'available' or 'at station'
+    if (status === '4' || status === '5') {
+        moveResourceToBingoCard(callsign);
+    }
+}
+
+function moveResourceToBingoCard(callsign) {
+    const resourceElement = document.getElementById(callsign);
+    const bingoGrid = document.getElementById("bingoGrid").querySelector(".bingo-items-container");
+    const log = document.getElementById("log");
+
+    if (resourceElement && bingoGrid) {
+        bingoGrid.appendChild(resourceElement); // Move unit back to bingo card
+
+        // Check if the unit was assigned to an incident
+        const incidentId = unitIncidentMap[callsign];
+        if (incidentId) {
+            // Log the clearance message
+            const logEntry = document.createElement("div");
+            logEntry.classList.add("log-message");
+            logEntry.innerHTML = highlightUnits(`${callsign} clear of incident #${incidentId}`);
+            log.prepend(logEntry);
+
+            // Remove the incident assignment from the map
+            delete unitIncidentMap[callsign];
+        }
+    }
+}
+
+    function getStatusString(status) {
+        const statusMap = {
+            '1': 'responding',
+            '3': 'on scene',
+            '4': 'available',
+            '5': 'at station',
+            '7': 'not available',
+            'AL': 'alerted'
+        };
+        return statusMap[status] || 'unknown';
+    }
+
+    function highlightUnits(text) {
+        return text.replace(/\b(LG\w+)\b/g, '<span class="highlight-unit">$1</span>');
+    }
+
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString();
+    }
+    </script>
+
+</body>
+</html>
