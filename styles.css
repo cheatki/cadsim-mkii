@@ -1,0 +1,362 @@
+/* Reset and Box Model */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    height: 100vh; /* Ensure body fills the viewport height */
+    margin: 0; /* Ensure no margin is added to the body */
+    display: flex;
+    flex-direction: column; /* Flex direction to align child elements vertically */
+}
+
+/* General Container Setup */
+.container {
+    flex: 1;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Grid columns as before */
+    grid-template-rows: 1fr auto; /* Flexible rows */
+    gap: 20px;
+    padding: 20px;
+    background-color: #2c2c2c;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    height: 100vh; /* Adjust to fill the entire viewport minus some padding for the body */
+}
+
+
+.version {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: #e0e0e0;
+    background-color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Resources Section */
+.resources-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    overflow-x: auto;
+    flex: 1; /* Allow the resource section to expand as needed */
+}
+.bingo-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bingo-item {
+    padding: 8px;
+    background-color: grey;
+    color: black;
+    font-weight: normal;
+    font-size: small;
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid #444;
+    transition: background-color 0.3s, color 0.3s;
+    min-width: 20px;
+    min-height: 20px;
+    cursor: pointer;
+    
+}
+
+/* Log and How-To Section */
+.log-how-to-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%; /* Allow this container to take full height */
+    flex: 1; /* Allow to grow and fill available space */
+}
+
+.log-section {
+    flex-grow: 1; /* Allow the log section to take all available space */
+    padding: 15px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+    max-height: 60vh; 
+}
+
+.how-to-section {
+    height: auto; /* Allow height to adjust based on content */
+    padding: 15px;
+    background-color: #303030;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    text-align: center;
+}
+
+
+
+#log {
+    flex-grow: 1; /* Allow the log to expand and take available space */
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Log Message Box */
+.log-message {
+    background-color: #444;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.highlight-unit {
+    background-color: black;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Log Header Styling */
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+
+.log-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: #bbb;
+}
+
+.SITREP {
+    background-color: #28a745;
+}
+
+.OPERATOR-COMMENT {
+    background-color: #ffc107;
+}
+
+.STATUS {
+    background-color: #17a2b8;
+}
+/* Incidents Section */
+.incidents-pane {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    flex: 1; /* Allow incidents pane to expand and fill space */
+}
+
+.incidents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.incident-card {
+    padding: 15px;
+    background-color: #444;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.incident-card h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.incident-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #bbbbbb;
+}
+
+.incident-resources {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #555;
+    border-radius: 6px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+
+/* Disclaimer Overlay Styling */
+.disclaimer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.disclaimer-box {
+    background-color: #000000;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: #e0e0e0;
+    max-width: 500px;
+    width: 90%;
+}
+
+.disclaimer-box button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.disclaimer-box button:hover {
+    background-color: #0056b3;
+}
+
+
+
+/* Command Section */
+.command-section {
+    grid-column: span 3;
+    display: flex;
+    gap: 10px;
+    padding: 5px; /* Adjusted padding to keep the overall height minimal */
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    height: 55px; /* Fixed height for the command section */
+    align-items: center; /* Align items vertically to center them */
+}
+
+.command-section input {
+    flex: 1;
+    padding: 2px 5px; /* Reduced padding to fit within 20px height */
+    font-size: 14px; /* Adjusted font size to fit */
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #222;
+    color: #e0e0e0;
+    height: 100%; /* Ensure the input takes the full height of the command section */
+}
+
+.command-section button {
+    padding: 2px 10px; /* Reduced padding to fit within 20px height */
+    font-size: 14px; /* Adjusted font size to fit */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    height: 100%; /* Ensure the button takes the full height of the command section */
+}
+
+.command-section button:hover {
+    background-color: #0056b3;
+}
+
+/* Modal Styling */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #2c2c2c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    text-align: center;
+    color: #e0e0e0;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal button:hover {
+    background-color: #0056b3;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
+}
