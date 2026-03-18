@@ -3,423 +3,618 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAD Simulator</title>
+    <title>CAD Simulator — NSW RURAL FIRE SERVICE</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="version">Version 1.0.4 Beta</div>
 
-    
-    <div class="container">
-    <!-- Disclaimer Modal -->
-    <div id="disclaimerOverlay" class="disclaimer-overlay">
-        <div class="disclaimer-box">
-            <h3>Welcome</h3>
-            <p>This system is designed to teach command line strings seen in Vision 5 CAD.
-                Start by trying the commands listed in the help section. Refresh to clear.
-            </p><strong>You must use a desktop to access this.</strong></p>
-                <p> -----  </p>
-                <p>Suggestions can be sent <a href="mailto:christopherwall-vol@rfs.nsw.gov.au">here</a>.</p>
-            <button id="disclaimerOkButton">OK</button>
+<!-- ===== TOP MENU BAR ===== -->
+<div class="menubar">
+    <div class="menubar-left">
+        <span class="menu-item">Operations</span>
+        <span class="menu-item">View</span>
+        <span class="menu-item">Actions</span>
+        <span class="menu-item">Resources</span>
+        <span class="menu-item">Map</span>
+        <span class="menu-item">Help</span>
+    </div>
+    <div class="menubar-right">
+        <span class="version-tag">v1.0.4 Beta</span>
+    </div>
+</div>
+
+<!-- ===== TOOLBAR ===== -->
+<div class="toolbar">
+    <div class="toolbar-group">
+        <button class="tb-btn" title="New Incident">&#128196;</button>
+        <button class="tb-btn" title="Refresh">&#8635;</button>
+        <span class="toolbar-sep"></span>
+        <span class="toolbar-label">Open Incidents: <strong>2</strong></span>
+        <span class="toolbar-sep"></span>
+        <span class="toolbar-label" id="activeIncidentLabel">Incident Updates: #47657</span>
+    </div>
+    <div class="toolbar-group">
+        <span class="toolbar-label" id="toolbarClock"></span>
+    </div>
+</div>
+
+<!-- ===== INCIDENT DETAIL AREA ===== -->
+<div class="incident-detail-area">
+    <!-- Incident Tabs Bar -->
+    <div class="incident-tabs-bar">
+        <span class="inc-tab"><span class="inc-tab-icon">&#9881;</span> Open Incidents - <span id="openIncCount">2</span></span>
+        <span class="inc-tab active" id="incTabActive">Incident [ 47657 ]</span>
+        <span class="inc-tab inc-tab-num" id="incTabNum">47657</span>
+        <span class="inc-tab-close" title="Close">&#10005;</span>
+    </div>
+
+    <!-- Detail + Units side by side -->
+    <div class="detail-and-units">
+        <!-- Left: incident detail as a proper table -->
+        <table class="detail-form-table">
+            <!-- Row 1: Yellow incident header -->
+            <tr class="dfr-header">
+                <td class="dfr-header-cell" colspan="4">
+                    <span class="dh-cad" id="detailCadNo">47657</span>
+                    <span class="dh-time" id="detailTime"></span>
+                    <span class="dh-na">NA</span>
+                    <span class="dh-priority" id="detailPriority">0</span>
+                    <span class="dh-pcount">0</span>
+                    <span class="dh-type" id="detailType">Truck Fire - FIRECALL</span>
+                </td>
+            </tr>
+            <!-- Row 2: Address -->
+            <tr>
+                <td class="dfr-label">Address</td>
+                <td class="dfr-value" colspan="3" id="detailAddress">MONARO HWY, WILLIAMSDALE, AUSTRALIAN CAPITAL TERRITORY, 2620 (ACT)</td>
+            </tr>
+            <!-- Row 3: Details -->
+            <tr>
+                <td class="dfr-label">Details</td>
+                <td class="dfr-value dfr-value-bold" colspan="3" id="detailNarrative">MULTIPLE REPEATS - TRUCK ALIGHT - BLOCKING ENTIRE HIGHWAY - DRIVER HAS SMOKE INHALATION - ACTFB ATTENDING AND REQ NSWRFS TO COME FROM SOUTH</td>
+            </tr>
+            <!-- Row 4: StopMessage -->
+            <tr>
+                <td class="dfr-label">StopMessage</td>
+                <td class="dfr-value-cell" id="detailStop"></td>
+                <td class="dfr-value-cell"></td>
+                <td class="dfr-value-cell"></td>
+            </tr>
+            <!-- Row 5: OIC -->
+            <tr>
+                <td class="dfr-label">OIC</td>
+                <td class="dfr-value" id="detailOIC"></td>
+                <td class="dfr-value-cell dfr-oic-right" colspan="2" id="detailOICRight"></td>
+            </tr>
+            <!-- Row 6: Caller -->
+            <tr>
+                <td class="dfr-label">Caller</td>
+                <td class="dfr-value" id="detailCaller">(000)</td>
+                <td class="dfr-value-cell" colspan="2"></td>
+            </tr>
+            <!-- No Linked Incidents -->
+            <tr>
+                <td class="dfr-linked" colspan="4">No Linked Incidents</td>
+            </tr>
+        </table>
+
+        <!-- Right: assigned units table -->
+        <div class="detail-units">
+            <div class="du-header-row">
+                <span class="du-header-badge">LG</span>
+                <span class="du-header-right">NK5516... 0</span>
+            </div>
+            <table class="du-table">
+                <thead>
+                    <tr>
+                        <th class="du-th-csign">CSign</th>
+                        <th>Asgn</th>
+                        <th>Mobile</th>
+                        <th>On Scn</th>
+                        <th>Bck On</th>
+                    </tr>
+                </thead>
+                <tbody id="assignedUnitsTable">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Resize handle between detail area and main content -->
+<div class="resize-handle-h" id="detailSplitter"></div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content" id="mainContent">
+
+    <!-- LEFT: Incident Tabs + Log Table -->
+    <div class="left-panel">
+        <!-- Tabs row matching real CAD: Events, Resources, Actions, etc. -->
+        <div class="panel-tabs">
+            <span class="ptab active">Events</span>
+            <span class="ptab">Resources</span>
+            <span class="ptab">Actions</span>
+            <span class="ptab ptab-disabled">Response</span>
+            <span class="ptab">Map</span>
+            <span class="ptab">Unit-info</span>
+            <span class="ptab">Further details</span>
+            <span class="ptab">Contacts</span>
+            <span class="ptab">Incident Summary</span>
+        </div>
+
+        <!-- Tab content panels -->
+        <!-- Events Tab (default) -->
+        <div class="tab-panel active" id="tabEvents">
+            <div class="log-table-wrap">
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th style="width:110px;">Time</th>
+                            <th style="width:80px;">Op Id</th>
+                            <th style="width:100px;">Callsign</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Hidden incident data for assignment modal -->
+        <div id="incidentsGrid" style="display:none;">
+            <div class="incident-card" id="47657" data-type="TRUCK FIRE" data-address="MONARO HWY, WILLIAMSDALE, AUSTRALIAN CAPITAL TERRITORY, 2620 (ACT)" data-narrative="MULTIPLE REPEATS - TRUCK ALIGHT - BLOCKING ENTIRE HIGHWAY - DRIVER HAS SMOKE INHALATION - ACTFB ATTENDING AND REQ NSWRFS TO COME FROM SOUTH"></div>
+            <div class="incident-card" id="67890" data-type="ASSIST AMBOS" data-address="45 RIVERSIDE DR, BRAIDWOOD, QUEANBEYAN-PALERANG COUNCIL, 2622" data-narrative="AMBOS REQ URGENT LIFT"></div>
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Get the disclaimer elements
-            const disclaimerOverlay = document.getElementById("disclaimerOverlay");
-            const okButton = document.getElementById("disclaimerOkButton");
-    
-            // Display the disclaimer when the page loads
-            disclaimerOverlay.style.display = "flex";
-    
-            // Close the disclaimer when the OK button is clicked
-            okButton.addEventListener("click", function () {
-                disclaimerOverlay.style.display = "none";
-            });
-        });
-    </script>
-    
-        <div class="resources-grid" id="bingoGrid">
-            <h3>All Resources</h3>
-            <div class="bingo-items-container">
-            <div class="bingo-item" id="LGARALU2">LGARALU2</div>
-            <div class="bingo-item" id="LGARALU7">LGARALU7</div>
-            <div class="bingo-item" id="LGARALU9">LGARALU9</div>
-            <div class="bingo-item" id="LGB31">LGB31</div>
-            <div class="bingo-item" id="LGB32">LGB32</div>
-            <div class="bingo-item" id="LGBOMBA1">LGBOMBA1</div>
-            <div class="bingo-item" id="LGBOMBA7">LGBOMBA7</div>
-            <div class="bingo-item" id="LGBRAID1">LGBRAID1</div>
-            <div class="bingo-item" id="LGBRAID7">LGBRAID7</div>
-            <div class="bingo-item" id="LGBRAID9">LGBRAID9</div>
-            <div class="bingo-item" id="LGBORMT1">LGBORMT1</div>
-            <div class="bingo-item" id="LGBORMT7">LGBORMT7</div>
-            <div class="bingo-item" id="LGBUNGEP">LGBUNGEP</div>
-            <div class="bingo-item" id="LGBUNGE1">LGBUNGE1</div>
-            <div class="bingo-item" id="LGBUNGE7">LGBUNGE7</div>
-            <div class="bingo-item" id="LGBUSA">LGBUSA</div>
-            <div class="bingo-item" id="LGBUSB">LGBUSB</div>
-            <div class="bingo-item" id="LGBUSC">LGBUSC</div>
-            <div class="bingo-item" id="LGCAPFL1">LGCAPFL1</div>
-            <div class="bingo-item" id="LGCAPFL7">LGCAPFL7</div>
-            <div class="bingo-item" id="LGCAPFL9">LGCAPFL9</div>
-            <div class="bingo-item" id="LGCARWO1">LGCARWO1</div>
-            <div class="bingo-item" id="LGCARWO7A">LGCARWO7A</div>
-            <div class="bingo-item" id="LGCARWO7B">LGCARWO7B</div>
-            <div class="bingo-item" id="LGCHARL2">LGCHARL2</div>
-            <div class="bingo-item" id="LGCHARL7">LGCHARL7</div>
-            <div class="bingo-item" id="LGCMDJ">LGCMDJ</div>
-            <div class="bingo-item" id="LGCMDK">LGCMDK</div>
-            <div class="bingo-item" id="LGLAKGE1">LGLAKGE1</div>
-            <div class="bingo-item" id="LGLAKGE6">LGLAKGE6</div>
-            <div class="bingo-item" id="LGDO">LGDO</div>
-            <div class="bingo-item" id="LGFARRI1">LGFARRI1</div>
-            <div class="bingo-item" id="LGFARRI7">LGFARRI7</div>
-            <div class="bingo-item" id="LGFCO1">LGFCO1</div>
-            <div class="bingo-item" id="LGFCO2">LGFCO2</div>
-            <div class="bingo-item" id="LGFCO41">LGFCO41</div>
-            <div class="bingo-item" id="LGFCO42">LGFCO42</div>
-            <div class="bingo-item" id="LGFCO43">LGFCO43</div>
-            <div class="bingo-item" id="LGFCO51">LGFCO51</div>
-            <div class="bingo-item" id="LGG1">LGG1</div>
-            <div class="bingo-item" id="LGG2">LGG2</div>
-            <div class="bingo-item" id="LGG3">LGG3</div>
-            <div class="bingo-item" id="LGG4">LGG4</div>
-            <div class="bingo-item" id="LGG5">LGG5</div>
-            <div class="bingo-item" id="LGDG1">LGDG1</div>
-            <div class="bingo-item" id="LGDG2">LGDG2</div>
-            <div class="bingo-item" id="LGDG3">LGDG3</div>
-            <div class="bingo-item" id="LGDG4">LGDG4</div>
-            <div class="bingo-item" id="LGHOSKI1">LGHOSKI1</div>
-            <div class="bingo-item" id="LGHOSKI7">LGHOSKI7</div>
-            <div class="bingo-item" id="LGHOSKI9">LGHOSKI9</div>
-            <div class="bingo-item" id="LGJERCR1">LGJERCR1</div>
-            <div class="bingo-item" id="LGJERCR7A">LGJERCR7A</div>
-            <div class="bingo-item" id="LGJERCR9">LGJERCR9</div>
-            <div class="bingo-item" id="LGJERCRP">LGJERCRP</div>
-            <div class="bingo-item" id="LGKRAWA1">LGKRAWA1</div>
-            <div class="bingo-item" id="LGKRAWA7">LGKRAWA7</div>
-            <div class="bingo-item" id="LGKRAWA9">LGKRAWA9</div>
-            <div class="bingo-item" id="LGLOGISA">LGLOGISA</div>
-            <div class="bingo-item" id="LGLOGISB">LGLOGISB</div>
-            <div class="bingo-item" id="LGLOGISC">LGLOGISC</div>
-            <div class="bingo-item" id="LGLOGISD">LGLOGISD</div>
-            <div class="bingo-item" id="LGMAJCR2">LGMAJCR2</div>
-            <div class="bingo-item" id="LGMAJCR7">LGMAJCR7</div>
-            <div class="bingo-item" id="LGMONGA1">LGMONGA1</div>
-            <div class="bingo-item" id="LGMONGA7">LGMONGA7</div>
-            <div class="bingo-item" id="LGMULLO1">LGMULLO1</div>
-            <div class="bingo-item" id="LGMULLO7">LGMULLO7</div>
-            <div class="bingo-item" id="LGNERRI1">LGNERRI1</div>
-            <div class="bingo-item" id="LGNERRI7">LGNERRI7</div>
-            <div class="bingo-item" id="LGNERRI9">LGNERRI9</div>
-            <div class="bingo-item" id="LGOCV">LGOCV</div>
-            <div class="bingo-item" id="LGQUEAN1">LGQUEAN1</div>
-            <div class="bingo-item" id="LGQUEAN7A">LGQUEAN7A</div>
-            <div class="bingo-item" id="LGQUEAN7B">LGQUEAN7B</div>
-            <div class="bingo-item" id="LGQUEAN9">LGQUEAN9</div>
-            <div class="bingo-item" id="LGRIDGE1A">LGRIDGE1A</div>
-            <div class="bingo-item" id="LGRIDGE1B">LGRIDGE1B</div>
-            <div class="bingo-item" id="LGWAMBO1A">LGWAMBO1A</div>
-            <div class="bingo-item" id="LGWAMBO1B">LGWAMBO1B</div>
-            <div class="bingo-item" id="LGWAMBO7A">LGWAMBO7A</div>
-            <div class="bingo-item" id="LGWAMBO7B">LGWAMBO7B</div>
-        </div>
-    </div>
+    <!-- Resize handle between left and right -->
+    <div class="resize-handle-v" id="mainSplitter"></div>
 
-           <!-- Log and How-To Column -->
-           <div class="log-how-to-column">
-            <!-- Log Section (Top Half) -->
-            <div class="log-section">
-                <h3>Log</h3>
-                <div id="log"></div>
+    <!-- RIGHT PANEL: Bingo + Action Prompts + Directory -->
+    <div class="right-panel" id="rightPanel">
+        <!-- Resource Bingo Grid -->
+        <div class="bingo-section">
+            <div class="bingo-header">
+                <span>All Resources — <span id="resourceCount">85</span></span>
             </div>
-
-            <!-- How-To Guide Section (Bottom Half) -->
-            <div style="
-            width: auto; /* Adjust width to fill parent container or change as needed */
-            height: auto;
-            margin: 20px 0; /* Reduce or remove margins that might affect layout */
-            padding: 20px; 
-            background-color: #303030; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-            font-family: Arial, sans-serif; 
-            color: #ffffff;
-            text-align: center;">
-
-                <h3 style="margin-bottom: 10px; font-size: 24px; color: #ffffff;">Command Line Simulator</h3>
-
-                <p style="font-size: 16px; margin-bottom: 15px;">
-                    Here are some commands to try:
-                </p>
-
-                <ul style="list-style: none; padding: 0;">
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 12px;">
-                            <code style="
-                                background-color: #525252; 
-                                padding: 5px 8px; 
-                                border-radius: 4px; 
-                                font-family: monospace;">
-                                callsign/s/status
-                            </code> – Update a unit’s status.
-                        </li>
-                        <li style="margin-bottom: 12px;">
-                            <strong>Status Codes:</strong>
-                            <ul style="list-style: none; padding-left: 15px;">
-                                <li style="margin-bottom: 6px;">
-                                    <code style="
-                                        background-color: #525252; 
-                                        padding: 5px 8px; 
-                                        border-radius: 4px; 
-                                        font-family: monospace;">
-                                        1
-                                    </code> – responding
-                                </li>
-                                <li style="margin-bottom: 6px;">
-                                    <code style="
-                                        background-color: #525252; 
-                                        padding: 5px 8px; 
-                                        border-radius: 4px; 
-                                        font-family: monospace;">
-                                        3
-                                    </code> – on scene
-                                </li>
-                                <li style="margin-bottom: 6px;">
-                                    <code style="
-                                        background-color: #525252; 
-                                        padding: 5px 8px; 
-                                        border-radius: 4px; 
-                                        font-family: monospace;">
-                                        4
-                                    </code> – available
-                                </li>
-                                <li style="margin-bottom: 6px;">
-                                    <code style="
-                                        background-color: #525252; 
-                                        padding: 5px 8px; 
-                                        border-radius: 4px; 
-                                        font-family: monospace;">
-                                        5
-                                    </code>– at station
-                                </li>
-                                <li style="margin-bottom: 6px;">
-                                    <code style="
-                                        background-color: #525252; 
-                                        padding: 5px 8px; 
-                                        border-radius: 4px; 
-                                        font-family: monospace;">
-                                        7
-                                    </code> – not available
-                                </li>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    
-                    <li style="margin-bottom: 12px;">
-                        <code style="
-                            background-color: #525252; 
-                            padding: 5px 8px; 
-                            border-radius: 4px; 
-                            font-family: monospace;">
-                            callsign/m/message
-                        </code> – Add an operator comment to a unit.
-                    </li>
-                    <li style="margin-bottom: 12px;">
-                        <code style="
-                            background-color: #525252; 
-                            padding: 5px 8px; 
-                            border-radius: 4px; 
-                            font-family: monospace;">
-                            callsign/m/message;U
-                        </code> – Add a sitrep to the unit under their incident.
-                    </li>
-                    <li style="margin-bottom: 12px;">
-                        <code style="
-                            background-color: #525252; 
-                            padding: 5px 8px; 
-                            border-radius: 4px; 
-                            font-family: monospace;">
-                            callsign/ASS
-                        </code> – Assign a unit to an incident.
-                    </li>
-                </ul>
-                <p><strong>Refresh to reset.</strong></p>
-            </div>
-        </div>
-        
-        <div class="incidents-pane">
-            <h3>Incidents</h3>
-            <div class="incidents-grid" id="incidentsGrid">
-                <!-- Example Incident Card -->
-                <div class="incident-card" id="47657">
-                    <h4>CAD #47657</h4>
-                    <p><strong>Type:</strong> GRASS FIRE</p>
-                    <p><strong>Address:</strong> BUNGENDORE RD X FED HWY BYWONG</p>
-                    <p><strong>Narrative:</strong> INFT TRAVELLING DOWN FEDERAL HWY SAW GRASS FIRE IN VIC OF GIVEN ADDRESS</p>
-                </div>
-                
-                <div class="incident-card" id="67890">
-                    <h4>CAD #67890</h4>
-                    <p><strong>Type:</strong> ASSIST AMBOS</p>
-                    <p><strong>Address:</strong> 45 RIVERSIDE DR, BRAIDWOOD</p>
-                    <p><strong>Narrative:</strong> AMBOS REQ URGENT LIFT</p>
+            <div class="resources-grid" id="bingoGrid">
+                <div class="bingo-items-container">
+                    <div class="bingo-item" id="LGARALU2">LGARALU2</div>
+                    <div class="bingo-item" id="LGARALU7">LGARALU7</div>
+                    <div class="bingo-item" id="LGARALU9">LGARALU9</div>
+                    <div class="bingo-item" id="LGB31">LGB31</div>
+                    <div class="bingo-item" id="LGB32">LGB32</div>
+                    <div class="bingo-item" id="LGBOMBA1">LGBOMBA1</div>
+                    <div class="bingo-item" id="LGBOMBA7">LGBOMBA7</div>
+                    <div class="bingo-item" id="LGBRAID1">LGBRAID1</div>
+                    <div class="bingo-item" id="LGBRAID7">LGBRAID7</div>
+                    <div class="bingo-item" id="LGBRAID9">LGBRAID9</div>
+                    <div class="bingo-item" id="LGBURRA1">LGBURRA1</div>
+                    <div class="bingo-item" id="LGBURRA2">LGBURRA2</div>
+                    <div class="bingo-item" id="LGBORMT1">LGBORMT1</div>
+                    <div class="bingo-item" id="LGBORMT7">LGBORMT7</div>
+                    <div class="bingo-item" id="LGBUNGEP">LGBUNGEP</div>
+                    <div class="bingo-item" id="LGBUNGE1">LGBUNGE1</div>
+                    <div class="bingo-item" id="LGBUNGE7">LGBUNGE7</div>
+                    <div class="bingo-item" id="LGBUSA">LGBUSA</div>
+                    <div class="bingo-item" id="LGBUSB">LGBUSB</div>
+                    <div class="bingo-item" id="LGBUSC">LGBUSC</div>
+                    <div class="bingo-item" id="LGCAPFL1">LGCAPFL1</div>
+                    <div class="bingo-item" id="LGCAPFL7">LGCAPFL7</div>
+                    <div class="bingo-item" id="LGCAPFL9">LGCAPFL9</div>
+                    <div class="bingo-item" id="LGCARWO1">LGCARWO1</div>
+                    <div class="bingo-item" id="LGCARWO7A">LGCARWO7A</div>
+                    <div class="bingo-item" id="LGCARWO7B">LGCARWO7B</div>
+                    <div class="bingo-item" id="LGCHARL2">LGCHARL2</div>
+                    <div class="bingo-item" id="LGCHARL7">LGCHARL7</div>
+                    <div class="bingo-item" id="LGCMDJ">LGCMDJ</div>
+                    <div class="bingo-item" id="LGCMDK">LGCMDK</div>
+                    <div class="bingo-item" id="LGLAKGE1">LGLAKGE1</div>
+                    <div class="bingo-item" id="LGLAKGE6">LGLAKGE6</div>
+                    <div class="bingo-item" id="LGDO">LGDO</div>
+                    <div class="bingo-item" id="LGFARRI1">LGFARRI1</div>
+                    <div class="bingo-item" id="LGFARRI7">LGFARRI7</div>
+                    <div class="bingo-item" id="LGFCO43">LGFCO43</div>
+                    <div class="bingo-item" id="LGFCO51">LGFCO51</div>
+                    <div class="bingo-item" id="LGHOSKI1">LGHOSKI1</div>
+                    <div class="bingo-item" id="LGHOSKI7">LGHOSKI7</div>
+                    <div class="bingo-item" id="LGHOSKI9">LGHOSKI9</div>
+                    <div class="bingo-item" id="LGJERCR1">LGJERCR1</div>
+                    <div class="bingo-item" id="LGJERCR7A">LGJERCR7A</div>
+                    <div class="bingo-item" id="LGJERCR7B">LGJERCR7B</div>
+                    <div class="bingo-item" id="LGJERCR9">LGJERCR9</div>
+                    <div class="bingo-item" id="LGJERCRP">LGJERCRP</div>
+                    <div class="bingo-item" id="LGKRAWA1">LGKRAWA1</div>
+                    <div class="bingo-item" id="LGKRAWA7">LGKRAWA7</div>
+                    <div class="bingo-item" id="LGKRAWA9">LGKRAWA9</div>
+                    <div class="bingo-item" id="LGLOGISA">LGLOGISA</div>
+                    <div class="bingo-item" id="LGLOGISB">LGLOGISB</div>
+                    <div class="bingo-item" id="LGLOGISC">LGLOGISC</div>
+                    <div class="bingo-item" id="LGLOGISD">LGLOGISD</div>
+                    <div class="bingo-item" id="LGMAJCR2">LGMAJCR2</div>
+                    <div class="bingo-item" id="LGMAJCR7">LGMAJCR7</div>
+                    <div class="bingo-item" id="LGMONGA1">LGMONGA1</div>
+                    <div class="bingo-item" id="LGMONGA7">LGMONGA7</div>
+                    <div class="bingo-item" id="LGMULLO1">LGMULLO1</div>
+                    <div class="bingo-item" id="LGMULLO7">LGMULLO7</div>
+                    <div class="bingo-item" id="LGNERRI1">LGNERRI1</div>
+                    <div class="bingo-item" id="LGNERRI7">LGNERRI7</div>
+                    <div class="bingo-item" id="LGNERRI9">LGNERRI9</div>
+                    <div class="bingo-item" id="LGOCV">LGOCV</div>
+                    <div class="bingo-item" id="LGQUEAN1">LGQUEAN1</div>
+                    <div class="bingo-item" id="LGQUEAN7A">LGQUEAN7A</div>
+                    <div class="bingo-item" id="LGQUEAN7B">LGQUEAN7B</div>
+                    <div class="bingo-item" id="LGQUEAN9">LGQUEAN9</div>
+                    <div class="bingo-item" id="LGRIDGE1A">LGRIDGE1A</div>
+                    <div class="bingo-item" id="LGRIDGE1B">LGRIDGE1B</div>
+                    <div class="bingo-item" id="LGWAMBO1A">LGWAMBO1A</div>
+                    <div class="bingo-item" id="LGWAMBO1B">LGWAMBO1B</div>
+                    <div class="bingo-item" id="LGWAMBO7A">LGWAMBO7A</div>
+                    <div class="bingo-item" id="LGWAMBO7B">LGWAMBO7B</div>
                 </div>
             </div>
         </div>
-        
-        <div class="command-section">
-            <input type="text" id="commandInput" placeholder="Enter command here.. " autofocus>
-            <button id="cmdButton" onclick="processCommand()">Submit</button>
+
+        <!-- Officers Grid -->
+        <div class="bingo-section officers-section">
+            <div class="bingo-header">
+                <span>Officers — <span id="officerCount">15</span></span>
+            </div>
+            <div class="resources-grid" id="officersGrid">
+                <div class="bingo-items-container">
+                    <div class="bingo-item" id="LGFCO1">LGFCO1</div>
+                    <div class="bingo-item" id="LGFCO2">LGFCO2</div>
+                    <div class="bingo-item" id="LGFCO41">LGFCO41</div>
+                    <div class="bingo-item" id="LGFCO42">LGFCO42</div>
+                    <div class="bingo-item" id="LGG1">LGG1</div>
+                    <div class="bingo-item" id="LGG2">LGG2</div>
+                    <div class="bingo-item" id="LGG3">LGG3</div>
+                    <div class="bingo-item" id="LGG4">LGG4</div>
+                    <div class="bingo-item" id="LGG5">LGG5</div>
+                    <div class="bingo-item" id="LGDG1">LGDG1</div>
+                    <div class="bingo-item" id="LGDG2">LGDG2</div>
+                    <div class="bingo-item" id="LGDG3">LGDG3</div>
+                    <div class="bingo-item" id="LGDG4">LGDG4</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Prompts -->
+        <div class="action-prompts">
+            <div class="ap-header">Action Prompts — <span id="promptCount">0</span></div>
+            <div class="ap-list" id="actionPromptsList">
+            </div>
+        </div>
+
+        <!-- Directory / Guide -->
+        <div class="directory-panel">
+            <div class="dir-header">
+                <span>Directory</span>
+                <span class="dir-tab">Guidance Information</span>
+            </div>
+            <div class="dir-list">
+                <div class="dir-item dir-section">Commands</div>
+                <div class="dir-item"><span class="dir-icon">&#9654;</span> callsign/S/status — Update status</div>
+                <div class="dir-item"><span class="dir-icon">&#9654;</span> callsign/M/message — Operator comment</div>
+                <div class="dir-item"><span class="dir-icon">&#9654;</span> callsign/M/msg;U — Sitrep</div>
+                <div class="dir-item"><span class="dir-icon">&#9654;</span> callsign/ASS — Assign to incident</div>
+                <div class="dir-item dir-section">Status Codes</div>
+                <div class="dir-item"><span class="dir-swatch" style="background:yellow;"></span> 1 — Responding</div>
+                <div class="dir-item"><span class="dir-swatch" style="background:black;border:1px solid #999;"></span> 3 — On Scene</div>
+                <div class="dir-item"><span class="dir-swatch" style="background:green;"></span> 4 — Available</div>
+                <div class="dir-item"><span class="dir-swatch" style="background:grey;"></span> 5 — At Station</div>
+                <div class="dir-item"><span class="dir-swatch" style="background:#CF9FFF;"></span> 7 — Not Available</div>
+                <div class="dir-item"><span class="dir-swatch" style="background:#4a7eff;"></span> AL — Alerted</div>
+                <div class="dir-item dir-section">Quick Links</div>
+                <div class="dir-item"><span class="dir-icon">&#128196;</span> Favourites</div>
+                <div class="dir-item"><span class="dir-icon">&#128196;</span> District Report</div>
+                <div class="dir-item"><span class="dir-icon">&#128196;</span> Notifications</div>
+                <div class="dir-item"><span class="dir-icon">&#128196;</span> Officers</div>
+                <div class="dir-item"><span class="dir-icon">&#128196;</span> Map</div>
+            </div>
         </div>
     </div>
+</div>
 
-    <script>
-    var input = document.getElementById("commandInput");
-    input.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            document.getElementById("cmdButton").click();
-        }
+<!-- ===== BOTTOM STATUS BARS ===== -->
+<div class="status-bars">
+    <div class="status-bar sb-notdisp">
+        <span class="sb-label">Available</span>
+        <div class="sb-units" id="sbNotDisp"></div>
+    </div>
+    <div class="status-bar sb-responding">
+        <span class="sb-label">All Responding Resources</span>
+        <div class="sb-units" id="sbResponding"></div>
+    </div>
+    <div class="status-bar sb-onscene">
+        <span class="sb-label">All On Scene Resources</span>
+        <div class="sb-units" id="sbOnScene"></div>
+    </div>
+    <div class="status-bar sb-alerted">
+        <span class="sb-label">Alerted</span>
+        <div class="sb-units" id="sbAlerted"></div>
+    </div>
+</div>
+
+<!-- ===== COMMAND INPUT ===== -->
+<div class="command-section">
+    <span class="cmd-prompt">CMD&gt;</span>
+    <input type="text" id="commandInput" placeholder="Enter command (e.g. LGBUNGE1/S/1)" autofocus spellcheck="false">
+    <button id="cmdButton" onclick="processCommand()">SEND</button>
+</div>
+
+<script>
+// ===== CLOCK =====
+function updateClock() {
+    const now = new Date();
+    const el = document.getElementById('toolbarClock');
+    if (el) el.textContent = now.toLocaleString('en-AU', {
+        day:'2-digit', month:'2-digit', year:'numeric',
+        hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false
     });
+    const hd = document.getElementById('headerDate');
+    if (hd) hd.textContent = now.toLocaleString('en-AU', {
+        day:'2-digit', month:'short', year:'numeric',
+        hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true
+    }).toUpperCase();
+}
+setInterval(updateClock, 1000);
+updateClock();
 
-    function processCommand() {
-        const commandInput = document.getElementById("commandInput");
-        const log = document.getElementById("log");
-        const commandText = commandInput.value.trim();
-
-        if (commandText !== "") {
-            const parsedCommands = interpretCommand(commandText);
-                parsedCommands.forEach(logMessage => {
-        const logEntry = document.createElement("div");
-        logEntry.classList.add("log-message");
-        logEntry.innerHTML = highlightUnits(logMessage); // Highlight units in the log
-
-        // Add the new log entry to the top
-        log.prepend(logEntry);
-
-        // Scroll to the latest entry
-        log.scrollTop = 0; // If latest entries are added at the top, set scroll to top
-    });
-
-
-            commandInput.value = "";
-        }
+// ===== COMMAND INPUT =====
+var input = document.getElementById("commandInput");
+input.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("cmdButton").click();
     }
+});
 
-    function interpretCommand(command) {
-        const [callsignsPart, commandType, statusOrMessage] = command.split('/');
-        if (!callsignsPart || !commandType) return [];
+function processCommand() {
+    const commandInput = document.getElementById("commandInput");
+    const log = document.getElementById("log");
+    const commandText = commandInput.value.trim();
 
-        const callsigns = callsignsPart.split(',').map(c => c.trim()).filter(Boolean);
-        const logMessages = [];
+    if (commandText !== "") {
+        const parsedCommands = interpretCommand(commandText);
+        parsedCommands.forEach(logMessage => {
+            const logEntry = document.createElement("tr");
+            logEntry.classList.add("log-row");
+            logEntry.innerHTML = logMessage;
+            log.appendChild(logEntry);
+        });
+        // Scroll to bottom
+        const wrap = document.querySelector('.log-table-wrap');
+        if (wrap) wrap.scrollTop = wrap.scrollHeight;
+        commandInput.value = "";
+    }
+}
+
+function interpretCommand(command) {
+    const parts = command.split('/');
+    if (parts.length < 2) return [];
+
+    // First part is always callsign(s)
+    const callsignsPart = parts[0];
+    const callsigns = callsignsPart.split(',').map(c => c.trim()).filter(Boolean);
+    const logMessages = [];
+
+    // Parse remaining parts as command/value pairs
+    let i = 1;
+    while (i < parts.length) {
+        const commandType = parts[i];
+        const statusOrMessage = parts[i + 1] || '';
 
         if (commandType === 'S' && statusOrMessage) {
             const statusString = getStatusString(statusOrMessage);
             callsigns.forEach(callsign => {
+                const prevStatus = unitStatusMap[callsign] || '5';
+                const prevString = getStatusString(prevStatus).toUpperCase();
+                unitStatusMap[callsign] = statusOrMessage;
                 updateResourceStatus(callsign, statusOrMessage);
-                logMessages.push(`${callsign}: status updated to ${statusString}`);
+                if (unitIncidentMap[callsign]) {
+                    logMessages.push(`
+                        <td class="lt-time row-alert">${getCurrentTime()}</td>
+                        <td class="lt-opid row-alert">OCC</td>
+                        <td class="lt-callsign row-alert">${callsign}</td>
+                        <td class="lt-message row-alert"><strong>Status Update</strong><br>Status changed from ${prevString} to ${statusString.toUpperCase()}</td>
+                    `);
+                }
             });
+            i += 2;
         } else if (commandType === 'M' && statusOrMessage) {
             const [message, reportType] = statusOrMessage.split(';');
             const tag = reportType === 'U' ? 'SITREP' : 'OPERATOR COMMENT';
+            const rowClass = reportType === 'U' ? 'row-sitrep' : 'row-comment';
 
             callsigns.forEach(callsign => {
-                logMessages.push(`
-                    <div class="log-message">
-                        <div class="log-header">
-                            <span class="log-tag ${tag.replace(' ', '-')}">${tag}</span>
-                            <span class="timestamp">${getCurrentTime()}</span>
-                        </div>
-                        <span>${callsign}: ${message.trim()}</span>
-                    </div>
-                `);
+                if (unitIncidentMap[callsign]) {
+                    logMessages.push(`
+                        <td class="lt-time ${rowClass}">${getCurrentTime()}</td>
+                        <td class="lt-opid ${rowClass}">OCC</td>
+                        <td class="lt-callsign ${rowClass}">${callsign}</td>
+                        <td class="lt-message ${rowClass}"><strong>[${tag}]</strong> ${message.trim()}</td>
+                    `);
+                }
             });
+            i += 2;
         } else if (commandType === 'ASS') {
             showIncidentSelectionModal(callsigns[0]);
+            i += 1;
         } else {
-            logMessages.push(`Invalid command: ${command}. Did you use caps? Try rewriting your command.`);
+            logMessages.push(`
+                <td class="lt-time row-error">${getCurrentTime()}</td>
+                <td class="lt-opid row-error">SYS</td>
+                <td class="lt-callsign row-error">—</td>
+                <td class="lt-message row-error">Invalid command: ${command}. Did you use caps? Try rewriting your command.</td>
+            `);
+            break;
         }
-
-        return logMessages;
     }
 
-    function showIncidentSelectionModal(callsign) {
-        const modalOverlay = document.createElement('div');
-        modalOverlay.classList.add('modal-overlay');
-        modalOverlay.onclick = () => {
-            closeModal(modalOverlay, modal);
-        };
-        document.body.appendChild(modalOverlay);
+    return logMessages;
+}
 
-        const modal = document.createElement('div');
-        modal.classList.add('modal');
+function showIncidentSelectionModal(callsign) {
+    const modalOverlay = document.createElement('div');
+    modalOverlay.classList.add('modal-overlay');
+    modalOverlay.onclick = () => {
+        closeModal(modalOverlay, modal);
+    };
+    document.body.appendChild(modalOverlay);
 
-        const selectLabel = document.createElement('label');
-        selectLabel.textContent = `Select an incident for ${callsign}: `;
-        modal.appendChild(selectLabel);
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
 
-        const select = document.createElement('select');
-        select.id = 'incidentSelect';
-        document.querySelectorAll('.incident-card').forEach(incident => {
-            const option = document.createElement('option');
-            option.value = incident.id;
-            option.textContent = incident.querySelector('h4').textContent;
-            select.appendChild(option);
-        });
-        modal.appendChild(select);
+    const selectLabel = document.createElement('label');
+    selectLabel.textContent = `Select an incident for ${callsign}: `;
+    modal.appendChild(selectLabel);
 
-        const submitButton = document.createElement('button');
-        submitButton.textContent = 'Assign';
-        submitButton.style.marginLeft = '10px';
-        submitButton.onclick = () => {
-            const incidentId = document.getElementById('incidentSelect').value;
-            assignResourceToIncident(callsign, incidentId);
-            closeModal(modalOverlay, modal);
-        };
-        modal.appendChild(submitButton);
+    const select = document.createElement('select');
+    select.id = 'incidentSelect';
+    document.querySelectorAll('.incident-card').forEach(incident => {
+        const option = document.createElement('option');
+        option.value = incident.id;
+        option.textContent = `CAD #${incident.id} — ${incident.dataset.type || ''}`;
+        select.appendChild(option);
+    });
+    modal.appendChild(select);
 
-        document.body.appendChild(modal);
-    }
+    const submitButton = document.createElement('button');
+    submitButton.textContent = 'Next';
+    submitButton.style.marginLeft = '10px';
+    submitButton.onclick = () => {
+        const incidentId = document.getElementById('incidentSelect').value;
+        closeModal(modalOverlay, modal);
+        showTurnoutMethodsModal(callsign, incidentId);
+    };
+    modal.appendChild(submitButton);
 
-    function closeModal(modalOverlay, modal) {
-        document.body.removeChild(modal);
-        document.body.removeChild(modalOverlay);
-    }
+    document.body.appendChild(modal);
+}
 
- // Initialize the map to track incident assignments
+function showTurnoutMethodsModal(callsign, incidentId) {
+    // Derive station from callsign (strip trailing digits/letters for display)
+    const station = callsign.replace(/\d+[A-Z]*$/i, '') + '_S';
+
+    const modalOverlay = document.createElement('div');
+    modalOverlay.classList.add('modal-overlay');
+    document.body.appendChild(modalOverlay);
+
+    const modal = document.createElement('div');
+    modal.classList.add('modal', 'turnout-modal');
+
+    modal.innerHTML = `
+        <div class="tm-titlebar">
+            <span class="tm-titlebar-icon">&#128196;</span>
+            <span class="tm-titlebar-text">Turnout Methods</span>
+            <span class="tm-titlebar-close" id="tmClose">&#10005;</span>
+        </div>
+        <table class="tm-table">
+            <thead>
+                <tr>
+                    <th>Station</th>
+                    <th>Callsign</th>
+                    <th colspan="2">Methods</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tm-station">${station}</td>
+                    <td class="tm-callsign">${callsign}</td>
+                    <td class="tm-method"><label class="tm-method-label"><input type="radio" name="turnoutMethod" value="P" checked> <span class="tm-p">P</span></label></td>
+                    <td class="tm-method"><label class="tm-method-label"><input type="radio" name="turnoutMethod" value="V"> V</label></td>
+                    <td class="tm-msg"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="tm-details">
+            <label class="tm-details-label">Additional Details</label>
+            <textarea class="tm-textarea" id="tmAdditionalDetails" rows="2"></textarea>
+        </div>
+        <div class="tm-buttons">
+            <button class="tm-ok" id="tmOkBtn">OK</button>
+            <button class="tm-cancel" id="tmCancelBtn">Cancel</button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Close handlers
+    document.getElementById('tmClose').onclick = () => closeModal(modalOverlay, modal);
+    document.getElementById('tmCancelBtn').onclick = () => closeModal(modalOverlay, modal);
+    modalOverlay.onclick = () => closeModal(modalOverlay, modal);
+
+    // OK handler
+    document.getElementById('tmOkBtn').onclick = () => {
+        const method = document.querySelector('input[name="turnoutMethod"]:checked').value;
+        closeModal(modalOverlay, modal);
+        assignResourceToIncident(callsign, incidentId, method);
+    };
+}
+
+function closeModal(modalOverlay, modal) {
+    document.body.removeChild(modal);
+    document.body.removeChild(modalOverlay);
+}
+
+// Initialize the map to track incident assignments
 const unitIncidentMap = {};
 
-function assignResourceToIncident(callsign, incidentId) {
+// Track current status of each unit
+const unitStatusMap = {};
+
+function assignResourceToIncident(callsign, incidentId, method) {
     const resourceElement = document.getElementById(callsign);
     const log = document.getElementById("log");
     if (resourceElement) {
-        // Change status to 'AL' (Alerted)
+        unitStatusMap[callsign] = 'AL';
         updateResourceStatus(callsign, 'AL');
 
-        // Move resource into the incident card
-        const incidentCard = document.getElementById(incidentId);
-        if (incidentCard) {
-            let incidentResources = incidentCard.querySelector('.incident-resources');
-            if (!incidentResources) {
-                incidentResources = document.createElement('div');
-                incidentResources.classList.add('incident-resources');
-                incidentCard.appendChild(incidentResources);
-            }
-            incidentResources.appendChild(resourceElement);
+        unitIncidentMap[callsign] = incidentId;
 
-            // Track the incident assignment in the map
-            unitIncidentMap[callsign] = incidentId;
+        // Update assigned units table
+        updateAssignedUnitsTable();
+
+        // Add action prompt
+        const methodLabel = method === 'P' ? 'pager despatch' : 'radio despatch';
+        addActionPrompt(`${callsign} → ${methodLabel} to incident #${incidentId}`);
+
+        // Get incident details for log message
+        const incCard = document.getElementById(incidentId);
+        const incType = incCard ? (incCard.dataset.type || '') : '';
+        const incAddr = incCard ? (incCard.dataset.address || '') : '';
+
+        if (method === 'P') {
+            // Pager: log "Resource Message Out" with full details
+            const logEntry = document.createElement("tr");
+            logEntry.classList.add("log-row");
+            logEntry.innerHTML = `
+                <td class="lt-time row-alert">${getCurrentTime()}</td>
+                <td class="lt-opid row-alert">OCC</td>
+                <td class="lt-callsign row-alert">${callsign}</td>
+                <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>${callsign} - ${incidentId} - ${incType} - FIRECALL - ${incAddr}</td>
+            `;
+            log.appendChild(logEntry);
         }
 
-        // Log the action
-        const logEntry = document.createElement("div");
-        logEntry.classList.add("log-message");
-        logEntry.innerHTML = highlightUnits(`${callsign} alerted to incident #${incidentId}`);
-        log.prepend(logEntry);
+        // Always log the alert itself
+        const logEntry2 = document.createElement("tr");
+        logEntry2.classList.add("log-row");
+        logEntry2.innerHTML = `
+            <td class="lt-time row-alert">${getCurrentTime()}</td>
+            <td class="lt-opid row-alert">OCC</td>
+            <td class="lt-callsign row-alert">${callsign}</td>
+            <td class="lt-message row-alert"><strong>Status Update</strong><br>Alerted to incident #${incidentId}</td>
+        `;
+        log.appendChild(logEntry2);
+
+        const wrap = document.querySelector('.log-table-wrap');
+        if (wrap) wrap.scrollTop = wrap.scrollHeight;
+
+        updateStatusBars();
     }
 }
 
@@ -428,67 +623,315 @@ function updateResourceStatus(callsign, status) {
     if (!resourceElement) return;
 
     const statusColors = {
-        '1': 'yellow',
-        '3': 'black',
-        '4': 'green',
-        '5': 'grey',
+        '1': '#ffff00',
+        '3': '#1a1a1a',
+        '4': '#3cb043',
+        '5': '#b0b0b0',
         '7': '#CF9FFF',
-        'AL': 'blue'
+        'AL': '#4a7eff'
     };
 
-    resourceElement.style.backgroundColor = statusColors[status] || 'grey';
-    resourceElement.style.color = status === '3' ? 'white' : 'black';
+    const newBg = statusColors[status] || '#b0b0b0';
+    const newColor = (status === '3' || status === 'AL') ? '#ffffff' : '#000000';
 
-    // Move resource back to bingo card if status is 'available' or 'at station'
+    // Set final color immediately so status bars pick it up
+    resourceElement.style.backgroundColor = newBg;
+    resourceElement.style.color = newColor;
+
     if (status === '4' || status === '5') {
         moveResourceToBingoCard(callsign);
     }
+
+    updateAssignedUnitsTable();
+    updateStatusBars();
+
+    // Flash both the bingo item AND its status bar badge twice
+    const badgeEl = findStatusBarBadge(callsign);
+    let count = 0;
+    const interval = setInterval(() => {
+        const isWhite = count % 2 === 0;
+        // Flash bingo item
+        resourceElement.style.backgroundColor = isWhite ? '#ffffff' : newBg;
+        resourceElement.style.color = isWhite ? '#000000' : newColor;
+        // Flash matching status bar badge
+        if (badgeEl) {
+            badgeEl.style.backgroundColor = isWhite ? '#ffffff' : '';
+            badgeEl.style.color = isWhite ? '#000000' : '';
+        }
+        count++;
+        if (count >= 4) {
+            clearInterval(interval);
+            resourceElement.style.backgroundColor = newBg;
+            resourceElement.style.color = newColor;
+            if (badgeEl) {
+                badgeEl.style.backgroundColor = '';
+                badgeEl.style.color = '';
+            }
+        }
+    }, 400);
 }
+
+const officerCallsigns = ['LGFCO1','LGFCO2','LGFCO41','LGFCO42','LGG1','LGG2','LGG3','LGG4','LGG5','LGDG1','LGDG2','LGDG3','LGDG4'];
 
 function moveResourceToBingoCard(callsign) {
-    const resourceElement = document.getElementById(callsign);
-    const bingoGrid = document.getElementById("bingoGrid").querySelector(".bingo-items-container");
     const log = document.getElementById("log");
+    const incidentId = unitIncidentMap[callsign];
+    if (incidentId) {
+        const logEntry = document.createElement("tr");
+        logEntry.classList.add("log-row");
+        logEntry.innerHTML = `
+            <td class="lt-time row-status">${getCurrentTime()}</td>
+            <td class="lt-opid row-status">OCC</td>
+            <td class="lt-callsign row-status">${callsign}</td>
+            <td class="lt-message row-status">Clear of incident #${incidentId}</td>
+        `;
+        log.appendChild(logEntry);
+        const wrap = document.querySelector('.log-table-wrap');
+        if (wrap) wrap.scrollTop = wrap.scrollHeight;
 
-    if (resourceElement && bingoGrid) {
-        bingoGrid.appendChild(resourceElement); // Move unit back to bingo card
+        delete unitIncidentMap[callsign];
+        delete unitTimes[callsign];
+        updateAssignedUnitsTable();
+    }
 
-        // Check if the unit was assigned to an incident
-        const incidentId = unitIncidentMap[callsign];
-        if (incidentId) {
-            // Log the clearance message
-            const logEntry = document.createElement("div");
-            logEntry.classList.add("log-message");
-            logEntry.innerHTML = highlightUnits(`${callsign} clear of incident #${incidentId}`);
-            log.prepend(logEntry);
+    updateStatusBars();
+}
 
-            // Remove the incident assignment from the map
-            delete unitIncidentMap[callsign];
+function getStatusString(status) {
+    const statusMap = {
+        '1': 'responding',
+        '3': 'on scene',
+        '4': 'available',
+        '5': 'at station',
+        '7': 'not available',
+        'AL': 'alerted'
+    };
+    return statusMap[status] || 'unknown';
+}
+
+function getCurrentTime() {
+    const now = new Date();
+    return now.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+}
+
+// ===== STATUS BARS =====
+function findStatusBarBadge(callsign) {
+    const bars = document.querySelectorAll('.sb-badge');
+    for (const b of bars) {
+        if (b.textContent === callsign) return b;
+    }
+    return null;
+}
+
+function updateStatusBars() {
+    const available = document.getElementById('sbNotDisp');
+    const responding = document.getElementById('sbResponding');
+    const onscene = document.getElementById('sbOnScene');
+    const alerted = document.getElementById('sbAlerted');
+
+    available.innerHTML = '';
+    responding.innerHTML = '';
+    onscene.innerHTML = '';
+    alerted.innerHTML = '';
+
+    document.querySelectorAll('.bingo-item').forEach(el => {
+        const bg = el.style.backgroundColor;
+        if (bg === 'rgb(60, 176, 67)' || bg === '#3cb043') {
+            const badge = document.createElement('span');
+            badge.className = 'sb-badge sb-badge-available';
+            badge.textContent = el.id;
+            available.appendChild(badge);
         }
+        if (bg === 'rgb(255, 255, 0)' || bg === '#ffff00') {
+            const badge = document.createElement('span');
+            badge.className = 'sb-badge sb-badge-responding';
+            badge.textContent = el.id;
+            responding.appendChild(badge);
+        }
+        if (bg === 'rgb(26, 26, 26)' || bg === '#1a1a1a') {
+            const badge = document.createElement('span');
+            badge.className = 'sb-badge sb-badge-onscene';
+            badge.textContent = el.id;
+            onscene.appendChild(badge);
+        }
+        if (bg === 'rgb(74, 126, 255)' || bg === '#4a7eff') {
+            const badge = document.createElement('span');
+            badge.className = 'sb-badge sb-badge-alerted';
+            badge.textContent = el.id;
+            alerted.appendChild(badge);
+        }
+    });
+}
+
+// ===== TRACK UNIT TIMES =====
+const unitTimes = {}; // { callsign: { asgn, mobile, onscn, bckon } }
+
+// ===== ASSIGNED UNITS TABLE =====
+function updateAssignedUnitsTable() {
+    const tbody = document.getElementById('assignedUnitsTable');
+    tbody.innerHTML = '';
+    for (const [callsign, incidentId] of Object.entries(unitIncidentMap)) {
+        const el = document.getElementById(callsign);
+        if (!el) continue;
+        const bg = el.style.backgroundColor;
+
+        // Determine color class for callsign cell
+        let csClass = 'du-cs-default';
+        if (bg === 'rgb(255, 255, 0)' || bg === '#ffff00') csClass = 'du-cs-responding';
+        else if (bg === 'rgb(26, 26, 26)' || bg === '#1a1a1a') csClass = 'du-cs-onscene';
+        else if (bg === 'rgb(74, 126, 255)' || bg === '#4a7eff') csClass = 'du-cs-alerted';
+        else if (bg === 'rgb(60, 176, 67)' || bg === '#3cb043') csClass = 'du-cs-available';
+
+        // Init times if not tracked yet
+        if (!unitTimes[callsign]) {
+            unitTimes[callsign] = { asgn: getCurrentTimeShort(), mobile: '', onscn: '', bckon: '' };
+        }
+        const t = unitTimes[callsign];
+
+        // Update times based on current status
+        if (csClass === 'du-cs-responding' && !t.mobile) t.mobile = getCurrentTimeShort();
+        if (csClass === 'du-cs-onscene' && !t.onscn) t.onscn = getCurrentTimeShort();
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="du-td-csign ${csClass}">${callsign}</td>
+            <td class="du-td-time">${t.asgn}</td>
+            <td class="du-td-time">${t.mobile}</td>
+            <td class="du-td-time">${t.onscn}</td>
+            <td class="du-td-time">${t.bckon}</td>
+        `;
+        tbody.appendChild(tr);
     }
 }
 
-    function getStatusString(status) {
-        const statusMap = {
-            '1': 'responding',
-            '3': 'on scene',
-            '4': 'available',
-            '5': 'at station',
-            '7': 'not available',
-            'AL': 'alerted'
-        };
-        return statusMap[status] || 'unknown';
-    }
+function getCurrentTimeShort() {
+    const now = new Date();
+    return now.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:false });
+}
 
-    function highlightUnits(text) {
-        return text.replace(/\b(LG\w+)\b/g, '<span class="highlight-unit">$1</span>');
-    }
+// ===== ACTION PROMPTS =====
+function addActionPrompt(msg) {
+    const list = document.getElementById('actionPromptsList');
+    const item = document.createElement('div');
+    item.className = 'ap-item';
+    item.innerHTML = `<span class="ap-time">${getCurrentTime()}</span> ${msg}`;
+    list.prepend(item);
+    document.getElementById('promptCount').textContent = list.children.length;
+}
 
-    function getCurrentTime() {
-        const now = new Date();
-        return now.toLocaleTimeString();
-    }
-    </script>
+// ===== TAB SWITCHING =====
+document.querySelectorAll('.ptab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        if (this.classList.contains('ptab-disabled')) return;
+        document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        const tabName = this.textContent.trim();
+        if (tabName === 'Events') {
+            document.getElementById('tabEvents').classList.add('active');
+        }
+    });
+});
+
+// ===== RESOURCE COUNT =====
+document.addEventListener('DOMContentLoaded', function() {
+    const count = document.querySelectorAll('.bingo-item').length;
+    document.getElementById('resourceCount').textContent = count;
+
+    // Set initial detail time
+    document.getElementById('detailTime').textContent = getCurrentTimeShort();
+
+    // Make incident cards clickable to switch detail view
+    document.querySelectorAll('.incident-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const id = this.id;
+            const type = this.dataset.type || '';
+            const addr = this.dataset.address || '';
+            const narr = this.dataset.narrative || '';
+            document.getElementById('detailCadNo').textContent = id;
+            document.getElementById('detailType').textContent = type;
+            document.getElementById('detailAddress').textContent = addr;
+            document.getElementById('detailNarrative').textContent = narr;
+            document.getElementById('incTabActive').textContent = `Incident Update [ ${id} ]`;
+            document.getElementById('incTabNum').textContent = id;
+            document.getElementById('activeIncidentLabel').textContent = `Incident Updates: #${id}`;
+            // Highlight selected
+            document.querySelectorAll('.incident-card').forEach(c => c.classList.remove('ic-selected'));
+            this.classList.add('ic-selected');
+        });
+    });
+    // Select first by default
+    const first = document.querySelector('.incident-card');
+    if (first) first.classList.add('ic-selected');
+
+    // ===== RESIZABLE PANELS =====
+    setupVerticalResize('mainSplitter', 'rightPanel');
+    setupHorizontalResize('detailSplitter', document.querySelector('.incident-detail-area'));
+});
+
+// Vertical splitter (left/right panels)
+function setupVerticalResize(handleId, panelId) {
+    const handle = document.getElementById(handleId);
+    const panel = document.getElementById(panelId);
+    if (!handle || !panel) return;
+
+    let startX, startW;
+
+    handle.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        startX = e.clientX;
+        startW = panel.offsetWidth;
+        handle.classList.add('dragging');
+        document.body.classList.add('resizing');
+
+        function onMove(e) {
+            const dx = startX - e.clientX;
+            const newW = Math.max(250, Math.min(startW + dx, window.innerWidth - 300));
+            panel.style.width = newW + 'px';
+            panel.style.flexShrink = '0';
+        }
+        function onUp() {
+            handle.classList.remove('dragging');
+            document.body.classList.remove('resizing');
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+    });
+}
+
+// Horizontal splitter (detail area height)
+function setupHorizontalResize(handleId, panel) {
+    const handle = document.getElementById(handleId);
+    if (!handle || !panel) return;
+
+    let startY, startH;
+
+    handle.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        startY = e.clientY;
+        startH = panel.offsetHeight;
+        handle.classList.add('dragging');
+        document.body.classList.add('resizing-v');
+
+        function onMove(e) {
+            const dy = e.clientY - startY;
+            const newH = Math.max(80, Math.min(startH + dy, window.innerHeight - 200));
+            panel.style.height = newH + 'px';
+            panel.style.flexShrink = '0';
+        }
+        function onUp() {
+            handle.classList.remove('dragging');
+            document.body.classList.remove('resizing-v');
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+    });
+}
+</script>
 
 </body>
 </html>
