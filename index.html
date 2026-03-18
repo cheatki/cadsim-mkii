@@ -160,13 +160,13 @@
                             <td class="lt-time row-alert">14:23:41</td>
                             <td class="lt-opid row-alert">OCC</td>
                             <td class="lt-callsign row-alert">LGJERCR1</td>
-                            <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>LGJERCR1 - 47657 - TRUCK FIRE - FIRECALL - MONARO HWY, WILLIAMSDALE, AUSTRALIAN CAPITAL TERRITORY, 2620 (ACT)</td>
+                            <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>LGJERCR1 - 47657 - TRUCK FIRE - VEHICLE FIRE - MONARO HWY, WILLIAMSDALE, AUSTRALIAN CAPITAL TERRITORY, 2620 (ACT)</td>
                         </tr>
                         <tr class="log-row">
                             <td class="lt-time row-alert">14:23:43</td>
                             <td class="lt-opid row-alert">OCC</td>
                             <td class="lt-callsign row-alert">LGDO</td>
-                            <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>LGDO - 47657 - TRUCK FIRE - FIRECALL - MONARO HWY, WILLIAMSDALE, AUSTRALIAN CAPITAL TERRITORY, 2620 (ACT)</td>
+                            <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>LGDO - 47657 - TRUCK FIRE - VEHICLE FIRE - MONARO HWY, WILLIAMSDALE, AUSTRALIAN CAPITAL TERRITORY, 2620 (ACT)</td>
                         </tr>
                     </tbody>
                 </table>
@@ -596,7 +596,7 @@ function assignResourceToIncident(callsign, incidentId, method) {
                 <td class="lt-time row-alert">${getCurrentTime()}</td>
                 <td class="lt-opid row-alert">OCC</td>
                 <td class="lt-callsign row-alert">${callsign}</td>
-                <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>${callsign} - ${incidentId} - ${incType} - FIRECALL - ${incAddr}</td>
+                <td class="lt-message row-alert"><strong>Resource Message Out</strong><br>${callsign} - ${incidentId} - ${incType} - VEHICLE FIRE - ${incAddr}</td>
             `;
             log.appendChild(logEntry);
         }
