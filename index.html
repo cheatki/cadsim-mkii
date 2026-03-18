@@ -855,6 +855,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const first = document.querySelector('.incident-card');
     if (first) first.classList.add('ic-selected');
 
+    // ===== PRE-ASSIGN PAGED UNITS =====
+    ['LGJERCR1', 'LGDO'].forEach(callsign => {
+        unitIncidentMap[callsign] = '47657';
+        unitStatusMap[callsign] = 'AL';
+        unitTimes[callsign] = { asgn: '14:23', mobile: '', onscn: '', bckon: '' };
+        const el = document.getElementById(callsign);
+        if (el) {
+            el.style.backgroundColor = '#4a7eff';
+            el.style.color = '#ffffff';
+        }
+    });
+    updateAssignedUnitsTable();
+    updateStatusBars();
+
     // ===== RESIZABLE PANELS =====
     setupVerticalResize('mainSplitter', 'rightPanel');
     setupHorizontalResize('detailSplitter', document.querySelector('.incident-detail-area'));
