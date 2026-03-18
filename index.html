@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAD Simulator — VISION 5</title>
+    <title>CAD Simulator — NSW RURAL FIRE SERVICE</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -277,13 +277,6 @@
                     <div class="bingo-item" id="LGDG3">LGDG3</div>
                     <div class="bingo-item" id="LGDG4">LGDG4</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Action Prompts -->
-        <div class="action-prompts">
-            <div class="ap-header">Action Prompts — <span id="promptCount">0</span></div>
-            <div class="ap-list" id="actionPromptsList">
             </div>
         </div>
 
@@ -578,10 +571,6 @@ function assignResourceToIncident(callsign, incidentId, method) {
         // Update assigned units table
         updateAssignedUnitsTable();
 
-        // Add action prompt
-        const methodLabel = method === 'P' ? 'pager despatch' : 'radio despatch';
-        addActionPrompt(`${callsign} → ${methodLabel} to incident #${incidentId}`);
-
         // Get incident details for log message
         const incCard = document.getElementById(incidentId);
         const incType = incCard ? (incCard.dataset.type || '') : '';
@@ -807,16 +796,6 @@ function updateAssignedUnitsTable() {
 function getCurrentTimeShort() {
     const now = new Date();
     return now.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:false });
-}
-
-// ===== ACTION PROMPTS =====
-function addActionPrompt(msg) {
-    const list = document.getElementById('actionPromptsList');
-    const item = document.createElement('div');
-    item.className = 'ap-item';
-    item.innerHTML = `<span class="ap-time">${getCurrentTime()}</span> ${msg}`;
-    list.prepend(item);
-    document.getElementById('promptCount').textContent = list.children.length;
 }
 
 // ===== TAB SWITCHING =====
